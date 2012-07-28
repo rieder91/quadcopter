@@ -8,7 +8,7 @@ This is the source code for a quadcopter I built during summer break 2012.
  * XBee Series 2
  * ADXL345
  * ITG3200
- * ("http://quadframe.com/products/quad004" Black Crow 4 Fibreglass Quadcopter Frame)
+ * [Black Crow 4 Fibreglass Frame]("http://quadframe.com/products/quad004" Black Crow 4 Fibreglass Quadcopter Frame)
  * Robbe Roxxy 2824-34 Outrunners
  * Robbe Roxxy BL-Control 710
  * APC 10 x 4.7 Propellers
