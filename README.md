@@ -21,9 +21,10 @@ This is the source code for a quadcopter I built during summer break 2012.
  * IMU using Discrete Cosine Matrices with 6 DOF
     * [Direction Cosine Matrix IMU: Theory](http://gentlenav.googlecode.com/files/DCMDraft2.pdf "Paper by William Premerlani and Paul Bizard")
     * [Original Papers](http://gentlenav.googlecode.com/files/MahonyPapers.zip Mahony's Papers on DCM)
+ * PID-Control
 
 ### TODO:
- * PID-Control
+ * PID-Tuning
  * Wireless stuff (Xbee)
  * Interfaces - GUI and possibly XML/JSON
  * (Crashing the whole thing xD)
