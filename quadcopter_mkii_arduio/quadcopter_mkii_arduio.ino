@@ -125,7 +125,7 @@ void loop() {
     if(i == 75) {
       Serial.print("X: ");
       Serial.print(xAngle);
-      Serial.print('\t Y:');
+      Serial.print("\t Y:");
       Serial.print(yAngle);
       Serial.print('\n');
       i = 0;  
