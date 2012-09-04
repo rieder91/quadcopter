@@ -1,6 +1,3 @@
-#ifndef TR_IMUFILTER_H
-#define TR_IMUFILTER_H
-
 #include "Arduino.h"
 
 #include <TR_ITG3200.h>
@@ -38,5 +35,3 @@ public:
 
 // inverted sqrt taken from quake3
 float invSqrt(float number);
-
-#endif

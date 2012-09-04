@@ -15,10 +15,10 @@ void TR_ADXL345::init() {
 }
 
 void TR_ADXL345::calibrate() {
-	int i, x, y, z;
+	int i, x, y, z, count = 100;
 	float xSum = 0.0, ySum = 0.0, zSum = 0.0;
 	
-	for(i = 0; i < 100; i++) {
+	for(i = 0; i < count; i++) {
 		readAccel(&x, &y, &z);
 		xSum += x;
 		ySum += y;
@@ -26,9 +26,9 @@ void TR_ADXL345::calibrate() {
 		delay(10);
 	}
 	
-	offset[0] = xSum / i;
-	offset[1] = ySum /= i;
-	offset[2] = zSum /= i;
+	offset[0] = xSum / count;
+	offset[1] = ySum / count;
+	offset[2] = zSum / count;
 }
 
 void TR_ADXL345::readAccel(int* xyz) {

@@ -47,10 +47,10 @@ void TR_ITG3200::readGyroTemp() {
   *
   */
 void TR_ITG3200::calibrate() {
-	int x, y, z, i;
+	int x, y, z, i, count = 128;
 	int xSum = 0, ySum = 0, zSum = 0;
 	
-	for(i = 0; i < 128; i++) {
+	for(i = 0; i < count; i++) {
 		delay(5);
 		readGyroRaw(&x, &y, &z);
 		xSum += x;
@@ -58,9 +58,9 @@ void TR_ITG3200::calibrate() {
 		zSum += z;
 	}
 	
-	offset[0] = -xSum / 128;
-	offset[1] = -ySum / 128;
-	offset[2] = -zSum / 128;
+	offset[0] = -xSum / count;
+	offset[1] = -ySum / count;
+	offset[2] = -zSum / count;
 }
 
 

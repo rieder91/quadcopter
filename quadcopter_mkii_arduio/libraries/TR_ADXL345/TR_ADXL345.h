@@ -1,5 +1,4 @@
-#ifndef TR_ADXL345_H
-#define TR_ADXL345_H
+#pragma once
 
 #include "Arduino.h"
 
@@ -22,5 +21,3 @@ public:
 	void updateRegisterI2C(int deviceAddress, byte dataAddress, byte dataValue);
 	void sendByteI2C(int deviceAddress, byte dataValue);
 };
-
-#endif

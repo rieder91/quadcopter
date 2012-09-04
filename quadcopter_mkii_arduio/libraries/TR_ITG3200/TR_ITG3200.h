@@ -1,5 +1,4 @@
-#ifndef TR_ITG3200_H
-#define TR_ITG3200_H
+#pragma once
 
 #include "Arduino.h"
 
@@ -24,5 +23,3 @@ public:
 	void updateRegisterI2C(int deviceAddress, byte dataAddress, byte dataValue);
 	void sendByteI2C(int deviceAddress, byte dataValue);
 };
-
-#endif

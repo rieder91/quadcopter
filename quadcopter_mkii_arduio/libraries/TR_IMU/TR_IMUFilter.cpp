@@ -18,8 +18,21 @@ TR_IMUFilter::TR_IMUFilter() {
 	eyInt = 0.0;
 	ezInt = 0.0;
 	
-	twoKp = 2.0f * 0.5f;
-	twoKi = 2.0f * 0.1f;
+	// default
+	//twoKp = 2.0f * 0.5f;
+	//twoKi = 2.0f * 0.1f;
+	
+	// From AeroQuad:
+	// kpRollPitch = 0.1;        // alternate 0.05;
+	// kiRollPitch = 0.0002;     // alternate 0.0001;
+	
+	// work reasonably well
+	// twoKp = 2.0f * 4.0f; 10f
+	// twoKi = 2.0f * 0.005f; 0.1f
+	
+	twoKp = 2.0f * 2.0f;
+	twoKi = 2.0f * 0.005f;
+	
 	integralFBx = 0.0f,  integralFBy = 0.0f, integralFBz = 0.0f;
 	
 	lastUpdate = 0;
