@@ -35,8 +35,8 @@ int esc_x2_pin = 11; // verified
 int esc_y1_pin = 10; // verified
 int esc_y2_pin = 9; // verified
 
-double xSpeed = 999;
-double ySpeed = 999;
+double xSpeed = 1000;
+double ySpeed = 1000;
 
 double xPIDSpeed;
 double yPIDSpeed;
