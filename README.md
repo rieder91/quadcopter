@@ -6,12 +6,12 @@ This is the source code for a quadcopter I built during summer break 2012.
 ### Used Hardware:
  * Arduino Uno R3
  * XBee Series 2
- * ADXL345
- * ITG3200
+ * ADXL345 - Accelerometer
+ * ITG3200 - Gyroscope
  * [Black Crow 4 Fibreglass Frame]("http://quadframe.com/products/quad004" Black Crow 4 Fibreglass Quadcopter Frame)
  * Robbe Roxxy 2824-34 Outrunners
  * Robbe Roxxy BL-Control 710
- * APC 10 x 4.7 Propellers
+ * APC 10 x 4.7 Propellers (2 Pusher and 2 Pullers)
  * LiPo Battery Pack 2200 mAh
 
 ### Done:
@@ -22,11 +22,11 @@ This is the source code for a quadcopter I built during summer break 2012.
     * [Direction Cosine Matrix IMU: Theory](http://gentlenav.googlecode.com/files/DCMDraft2.pdf "Paper by William Premerlani and Paul Bizard")
     * [Original Papers](http://gentlenav.googlecode.com/files/MahonyPapers.zip Mahony's Papers on DCM)
  * PID-Control
+ * PID-Tuning
+ * Wireless Stuff (XBee)
 
 ### TODO:
- * PID-Tuning
- * Wireless stuff (Xbee)
- * Interfaces - GUI and possibly XML/JSON
+ * Interfaces - GUI (most likely in Pyhton)
  * (Crashing the whole thing xD)
  
  
