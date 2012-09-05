@@ -46,9 +46,11 @@ double targetAngleX = 180.0;
 double targetAngleY = 180.0;
 
 PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.4, 0.05, 0.2, DIRECT); // .7, .1, .2
+PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 1.0, 0.05, 0.2, DIRECT);
+
+// Previous Settings
 //PID xPID(&xAngle, &xPIDSpeed, &targetAngle, 0.25, 0.05, 0.1, DIRECT); // .7, .1, .2
 //PID xPID(&xAngle, &xPIDSpeed, &targetAngle, 0.55, 0.1, 0.3, DIRECT); // .7, .1, .2
-PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 1.0, 0.05, 0.2, DIRECT);
 
 
 // Remote Control Stuff
@@ -98,7 +100,7 @@ void setup() {
     yPID.SetMode(AUTOMATIC);
     yPID.SetSampleTime(5);
     
-    delay(2000);
+    delay(500);
     
     // Motor debug variable
     j = 0;
@@ -114,6 +116,14 @@ void loop() {
     imu.getRPY(angles);
     xAngle = angles[1] + 180 + xOffsetIMU;
     yAngle = angles[0] + 180 + yOffsetIMU;
+  }
+  
+  // Emergency Shutdown
+  if(xAngle <= 130 || xAngle >= 230 || yAngle <= 130 || yAngle >= 230) {
+    Serial.print("failsafe_triggered;");
+    en_motors = false;
+    setSpeedX(1000);
+    setSpeedY(1000);
   }
   
   if(use_motors && en_motors) {
@@ -147,6 +157,7 @@ void loop() {
       yPID.SetOutputLimits(-10, 10);
     }
   }
+  
   
   // Read the serial buffer
   if(Serial.available() >= 10) {
@@ -237,7 +248,7 @@ void loop() {
       Serial.print(";");
     }
     
-    // Individual Servos
+    // Individual Servos - testing only
     else if(strcmp(command, "setX1") == 0) {
       Serial.print("setX1.Ack;");
       if(number >= 1000 && number <= 2000) {
