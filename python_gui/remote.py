@@ -114,10 +114,6 @@ class Remote(Frame):
         self.serialOutput.pack(fill="both", expand="yes")
         
         self.serialOutputScroll.config(command=self.serialOutput.yview)
-
-        for i in range(100):
-            self.serialOutput.insert(END, i)
-            
         self.serialOutput.yview(END)
 
 
