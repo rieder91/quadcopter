@@ -120,7 +120,7 @@ void loop() {
   }
   
   // Emergency Shutdown
-  if(xAngle <= 130 || xAngle >= 230 || yAngle <= 130 || yAngle >= 230) {
+  if(xAngle <= 110 || xAngle >= 250 || yAngle <= 110 || yAngle >= 250) {
     Serial.print("failsafe_triggered;");
     en_motors = false;
     setSpeedX(1000);
@@ -167,6 +167,9 @@ void loop() {
     } else if(ySpeed >= 1400 && ySpeed < 2000) {
       yPID.SetOutputLimits(-10, 10);
     }*/
+  } else {
+    setSpeedX(1000);
+    setSpeedY(1000);  
   }
   
   
