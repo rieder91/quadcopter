@@ -1,4 +1,7 @@
+#! /usr/bin/env python
+
 from Tkinter import *
+from serial import *
 
 class Remote(Frame):
     def __init__(self, master=None):
@@ -430,7 +433,7 @@ class Remote(Frame):
 def serial_read(i):
     app.serialOutput.insert(END, "Run number: " + str(i))
     app.serialOutput.yview(END)
-    root.after(100, serial_read, i+1)
+    root.after(200, serial_read, i+1)
 
 
 root = Tk()
