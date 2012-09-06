@@ -46,7 +46,8 @@ double targetAngleX = 180.0;
 double targetAngleY = 180.0;
 
 PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.4, 0.05, 0.2, DIRECT); // .7, .1, .2
-PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 1.0, 0.05, 0.2, DIRECT);
+PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 0.4, 0.05, 0.2, DIRECT);
+//PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 1.0, 0.05, 0.2, DIRECT);
 
 // Previous Settings
 //PID xPID(&xAngle, &xPIDSpeed, &targetAngle, 0.25, 0.05, 0.1, DIRECT); // .7, .1, .2
@@ -70,7 +71,7 @@ boolean flush_needed = false;
 
 void setup() {
   // Init serial
-  Serial.begin(115200);
+  Serial.begin(19200);
   
   if(use_imu) {
     Wire.begin();
@@ -148,6 +149,16 @@ void loop() {
     }
     
     if(ySpeed < 1250) {
+      yPID.SetOutputLimits(-20, 20);
+    } else if(ySpeed >= 1250 && ySpeed < 1350) {
+      yPID.SetOutputLimits(-12, 12);
+    } else if(ySpeed >= 1350 && ySpeed < 1400) {
+      yPID.SetOutputLimits(-8, 8);
+    } else if(ySpeed >= 1400 && ySpeed < 2000) {
+      yPID.SetOutputLimits(-5, 5);
+    }
+    
+    /*if(ySpeed < 1250) {
       yPID.SetOutputLimits(-50, 50);
     } else if(ySpeed >= 1250 && ySpeed < 1350) {
       yPID.SetOutputLimits(-30, 30);
@@ -155,7 +166,7 @@ void loop() {
       yPID.SetOutputLimits(-15, 15);
     } else if(ySpeed >= 1400 && ySpeed < 2000) {
       yPID.SetOutputLimits(-10, 10);
-    }
+    }*/
   }
   
   
