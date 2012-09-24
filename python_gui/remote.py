@@ -569,8 +569,15 @@ def keypress(event):
 
 # Establish Serial Link
 ser = Serial()
+
+# Windows
+ser.port = "COM4" # XBee
+# ser.port = "COM3" # USB
+
+# Mac OS X/Linux
+# ser.port = "/dev/something"
+
 ser.baudrate = 19200
-ser.port = "COM3"
 ser.timeout = 1
 ser.close()
 ser.open()
