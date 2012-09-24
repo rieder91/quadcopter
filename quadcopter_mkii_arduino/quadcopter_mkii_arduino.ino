@@ -45,8 +45,14 @@ double yPIDSpeed;
 double targetAngleX = 180.0;
 double targetAngleY = 180.0;
 
-PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.4, 0.05, 0.2, DIRECT); // .7, .1, .2
-PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 0.4, 0.05, 0.2, DIRECT);
+//PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.4, 0.05, 0.2, DIRECT); // .7, .1, .2
+//PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 0.4, 0.05, 0.2, DIRECT);
+
+PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.7, 0.0, 0.0, DIRECT); // .7, .1, .2
+PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 0.7, 0.0, 0.0, DIRECT);
+
+
+
 //PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 1.0, 0.05, 0.2, DIRECT);
 
 // Previous Settings
@@ -93,7 +99,7 @@ void setup() {
     setSpeedX(xSpeed);
     setSpeedY(ySpeed);
     
-    xPID.SetOutputLimits(-20, 20);
+    xPID.SetOutputLimits(-40, 40);
     xPID.SetMode(AUTOMATIC);
     xPID.SetSampleTime(5);
     
@@ -120,24 +126,27 @@ void loop() {
   }
   
   // Emergency Shutdown
-  if(xAngle <= 110 || xAngle >= 250 || yAngle <= 110 || yAngle >= 250) {
+  /*if(xAngle <= 110 || xAngle >= 250 || yAngle <= 110 || yAngle >= 250) {
     Serial.print("failsafe_triggered\n");
     en_motors = false;
     setSpeedX(1000);
     setSpeedY(1000);
-  }
+  }*/
   
   if(use_motors && en_motors) {
     xPID.Compute();
     yPID.Compute();
-    
-    setSpeedESC(esc_x1, xSpeed - xPIDSpeed/2);
-    setSpeedESC(esc_x2, xSpeed + xPIDSpeed/2);
-    
+    if(xPIDSpeed < 0) {
+      setSpeedESC(esc_x1, xSpeed - xPIDSpeed/2);
+      setSpeedESC(esc_x2, xSpeed + xPIDSpeed);
+    } else {
+      setSpeedESC(esc_x1, xSpeed - xPIDSpeed);
+      setSpeedESC(esc_x2, xSpeed + xPIDSpeed/2);
+    }
     setSpeedESC(esc_y1, ySpeed + yPIDSpeed/2);
     setSpeedESC(esc_y2, ySpeed - yPIDSpeed/2);
     
-    
+    /*
     if(xSpeed < 1250) {
       xPID.SetOutputLimits(-20, 20);
     } else if(xSpeed >= 1250 && xSpeed < 1350) {
@@ -157,7 +166,7 @@ void loop() {
     } else if(ySpeed >= 1400 && ySpeed < 2000) {
       yPID.SetOutputLimits(-5, 5);
     }
-    
+    */
     /*if(ySpeed < 1250) {
       yPID.SetOutputLimits(-50, 50);
     } else if(ySpeed >= 1250 && ySpeed < 1350) {

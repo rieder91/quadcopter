@@ -8,8 +8,8 @@ from threading import Thread
 class Remote(Frame):
     def __init__(self, master=None):
         # Control variables
-        self.xSpeed = 1150
-        self.ySpeed = 1150
+        self.xSpeed = 1050
+        self.ySpeed = 1050
         self.xAngle = 180
         self.yAngle = 180
 
@@ -347,6 +347,8 @@ class Remote(Frame):
         
     def zeroSpeed(self):
         ser.write("setBB01000")
+        self.xSpeed = 1050;
+        self.ySpeed = 1050;
         dbg_output("Setting Speed to Zero")
 
         
@@ -415,6 +417,8 @@ class Remote(Frame):
     def disMotors(self):
         ser.write("setBB01000")
         ser.write("enMTR00001")
+        self.xSpeed = 1050;
+        self.ySpeed = 1050;
         dbg_output("Disabling Motors")
 
 
@@ -571,8 +575,8 @@ def keypress(event):
 ser = Serial()
 
 # Windows
-ser.port = "COM4" # XBee
-# ser.port = "COM3" # USB
+# ser.port = "COM4" # XBee
+ser.port = "COM3" # USB
 
 # Mac OS X/Linux
 # ser.port = "/dev/something"
