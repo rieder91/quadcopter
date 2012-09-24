@@ -24,10 +24,10 @@ This is the source code for a quadcopter I built during summer break 2012.
  * PID-Control
  * PID-Tuning
  * Wireless Stuff (XBee)
+ * GUI with Python and TkInter (Tcl/Tk)
 
 ### TODO:
- * Interfaces - GUI (most likely in Pyhton)
- * (Crashing the whole thing xD)
+ * Crashing the whole thing xD
  
  
  ### How to contact me
