@@ -107,7 +107,7 @@ void setup() {
     j = 0;
   }
   
-  Serial.print("Setup complete");
+  Serial.print("Setup complete\n");
 }
 
 
@@ -121,7 +121,7 @@ void loop() {
   
   // Emergency Shutdown
   if(xAngle <= 110 || xAngle >= 250 || yAngle <= 110 || yAngle >= 250) {
-    Serial.print("failsafe_triggered;");
+    Serial.print("failsafe_triggered\n");
     en_motors = false;
     setSpeedX(1000);
     setSpeedY(1000);
@@ -201,7 +201,7 @@ void loop() {
   }
   
   if(flush_needed) {
-    Serial.print("flushing_ser_cache;");
+    Serial.print("flushing_ser_cache\n");
     
     // Clear Buffer
     while(Serial.available()>0) {
@@ -221,7 +221,7 @@ void loop() {
         xSpeed = number;
       }
       Serial.print(xSpeed);
-      Serial.print(";");
+      Serial.print("\n");
     } 
     
     // Y-Axis
@@ -231,7 +231,7 @@ void loop() {
         ySpeed = number;
       }
       Serial.print(ySpeed);
-      Serial.print(";");
+      Serial.print("\n");
     } 
     
     // Both Axis
@@ -242,7 +242,7 @@ void loop() {
         ySpeed = number;
       }
       Serial.print(xSpeed);
-      Serial.print(";");
+      Serial.print("\n");
     } 
     
     // Set Angles
@@ -252,34 +252,34 @@ void loop() {
         targetAngleX = number;
       }
       Serial.print(targetAngleX);
-      Serial.print(";");
+      Serial.print("\n");
     } else if(strcmp(command, "setYA") == 0) {
       Serial.print("setYA.Ack;");
       if(number >= 140 && number <= 220) {
         targetAngleY = number;
       }
       Serial.print(targetAngleY);
-      Serial.print(";");
+      Serial.print("\n");
     }
     
     // Individual Servos - testing only
     else if(strcmp(command, "setX1") == 0) {
-      Serial.print("setX1.Ack;");
+      Serial.print("setX1.Ack\n");
       if(number >= 1000 && number <= 2000) {
         setSpeedESC(esc_x1, number);
       }
     } else if(strcmp(command, "setX2") == 0) {
-      Serial.print("setX2.Ack;");
+      Serial.print("setX2.Ack\n");
       if(number >= 1000 && number <= 2000) {
         setSpeedESC(esc_x2, number);
       }
     } else if(strcmp(command, "setY1") == 0) {
-      Serial.print("setY1.Ack;");
+      Serial.print("setY1.Ack\n");
       if(number >= 1000 && number <= 2000) {
         setSpeedESC(esc_y1, number);
       }
     } else if(strcmp(command, "setY2") == 0) {
-      Serial.print("setY2.Ack;");
+      Serial.print("setY2.Ack\n");
       if(number >= 1000 && number <= 2000) {
         setSpeedESC(esc_y2, number);
       }
@@ -293,19 +293,19 @@ void loop() {
         xOffsetIMU = number;
       }
       Serial.print(xOffsetIMU);
-      Serial.print(";");
+      Serial.print("\n");
     } else if(strcmp(command, "setYO") == 0) {
-      Serial.print("setXO.Ack;");
+      Serial.print("setYO.Ack;");
       if(number >= -20 && number <= 20) {
         yOffsetIMU = number;
       }
       Serial.print(yOffsetIMU);
-      Serial.print(";");
+      Serial.print("\n");
     } 
     
     // Enable Motors
     else if(strcmp(command, "enMTR") == 0) {
-      Serial.print("enMTR.Ack;");
+      Serial.print("enMTR.Ack\n");
       if(number == 1) {
         en_motors = false;
       } else if (number == 2) {
@@ -315,21 +315,21 @@ void loop() {
     
     // Debug 
     else if(strcmp(command, "dbIMU") == 0) {
-      Serial.print("dbIMU.Ack;");
+      Serial.print("dbIMU.Ack\n");
       if(number == 1) {
         debug_imu = false;
       } else if(number == 2) {
         debug_imu = true;
       }
     } else if(strcmp(command, "dbMTR") == 0) {
-      Serial.print("dbMTR.Ack;");
+      Serial.print("dbMTR.Ack\n");
       if(number == 1) {
         debug_motors = false;
       } else if(number == 2) {
         debug_motors = true;
       }
     } else if(strcmp(command, "dbSER") == 0) {
-      Serial.print("dbSER.Ack;");
+      Serial.print("dbSER.Ack\n");
       if(number == 1) {
         debug_serial = false;
       } else if(number == 2) {
@@ -349,12 +349,12 @@ void debug() {
   if(debug_imu) {
     // Anti-Spam
     if(i == 100) {
-      imu.print(true, true);
+      //imu.print(true, true);
       Serial.print("X:");
       Serial.print(xAngle);
       Serial.print(";Y:");
       Serial.print(yAngle);
-      Serial.print(';');
+      Serial.print('\n');
       i = 0;  
     }
     i++;
@@ -367,7 +367,7 @@ void debug() {
       Serial.print(xPIDSpeed);
       Serial.print(";y-PID:");
       Serial.print(yPIDSpeed);
-      Serial.print(';');
+      Serial.print('\n');
     }
     j++;
   }
@@ -378,7 +378,7 @@ void debug() {
       Serial.print(command);
       Serial.print(";Value:");
       Serial.print(value);
-      Serial.print(';');
+      Serial.print('\n');
     }
   }
 }
