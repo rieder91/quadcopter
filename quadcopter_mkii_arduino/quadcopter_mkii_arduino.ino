@@ -23,6 +23,7 @@ TR_IMUFilter imu;
 float angles[3];
 double xAngle, yAngle;
 
+
 int xOffsetIMU = -4;
 int yOffsetIMU = -3;
 
@@ -48,12 +49,9 @@ double targetAngleY = 180.0;
 //PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.4, 0.05, 0.2, DIRECT); // .7, .1, .2
 //PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 0.4, 0.05, 0.2, DIRECT);
 
-PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.7, 0.0, 0.0, DIRECT); // .7, .1, .2
-PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 0.7, 0.0, 0.0, DIRECT);
+PID xPID(&xAngle, &xPIDSpeed, &targetAngleX, 0.7, 0.0, 0.4, DIRECT);
+PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 0.7, 0.0, 0.4, DIRECT);
 
-
-
-//PID yPID(&yAngle, &yPIDSpeed, &targetAngleY, 1.0, 0.05, 0.2, DIRECT);
 
 // Previous Settings
 //PID xPID(&xAngle, &xPIDSpeed, &targetAngle, 0.25, 0.05, 0.1, DIRECT); // .7, .1, .2
@@ -72,8 +70,6 @@ char tempChar;
 int number;
 
 boolean flush_needed = false;
-
-
 
 void setup() {
   // Init serial
@@ -99,7 +95,7 @@ void setup() {
     setSpeedX(xSpeed);
     setSpeedY(ySpeed);
     
-    xPID.SetOutputLimits(-40, 40);
+    xPID.SetOutputLimits(-20, 20);
     xPID.SetMode(AUTOMATIC);
     xPID.SetSampleTime(5);
     
@@ -136,13 +132,10 @@ void loop() {
   if(use_motors && en_motors) {
     xPID.Compute();
     yPID.Compute();
-    if(xPIDSpeed < 0) {
-      setSpeedESC(esc_x1, xSpeed - xPIDSpeed/2);
-      setSpeedESC(esc_x2, xSpeed + xPIDSpeed);
-    } else {
-      setSpeedESC(esc_x1, xSpeed - xPIDSpeed);
-      setSpeedESC(esc_x2, xSpeed + xPIDSpeed/2);
-    }
+    
+    setSpeedESC(esc_x1, xSpeed - xPIDSpeed);
+    setSpeedESC(esc_x2, xSpeed + xPIDSpeed);
+    
     setSpeedESC(esc_y1, ySpeed + yPIDSpeed/2);
     setSpeedESC(esc_y2, ySpeed - yPIDSpeed/2);
     
