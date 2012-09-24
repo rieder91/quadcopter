@@ -3,6 +3,7 @@
 from Tkinter import *
 from serial import *
 from threading import Thread
+import platform
 
 
 class Remote(Frame):
@@ -574,21 +575,16 @@ def keypress(event):
 # Establish Serial Link
 ser = Serial()
 
-# Windows
-# ser.port = "COM4" # XBee
-ser.port = "COM3" # USB
-
-# Mac OS X/Linux
-ser.port = "/dev/cu.usbserial-AH01D6I0"
+if platform.system() == "Windows":
+    ser.port = "COM3" # USB
+    # er.port = "COM4" # XBee
+else:
+    ser.port = "/dev/cu.usbserial-AH01D6I0"
 
 ser.baudrate = 19200
 ser.timeout = 1
 ser.close()
 ser.open()
-
-# Thread for serial data reading
-readThread = StoppableThread()
-readThread.start()
 
 # Build GUI
 root = Tk()
@@ -596,6 +592,10 @@ root.bind_all('<Key>', keypress)
 app = Remote(master=root)
 app.master.title("Quadcopter Remote Control")
 app.master.minsize(800, 600)
+
+# Thread for serial data reading
+readThread = StoppableThread()
+readThread.start()
 
 # start event handling
 app.mainloop()
