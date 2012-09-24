@@ -571,11 +571,11 @@ def keypress(event):
 ser = Serial()
 
 # Windows
-ser.port = "COM4" # XBee
-# ser.port = "COM3" # USB
+#ser.port = "COM4" # XBee
+#ser.port = "COM3" # USB
 
 # Mac OS X/Linux
-# ser.port = "/dev/something"
+ser.port = "/dev/cu.usbserial-AH01D6I0"
 
 ser.baudrate = 19200
 ser.timeout = 1
