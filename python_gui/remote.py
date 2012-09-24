@@ -2,13 +2,23 @@
 
 from Tkinter import *
 from serial import *
+from threading import Thread
+
 
 class Remote(Frame):
     def __init__(self, master=None):
+        # Control variables
+        self.xSpeed = 1150
+        self.ySpeed = 1150
+        self.xAngle = 180
+        self.yAngle = 180
+
+        
         Frame.__init__(self, master)
         self.pack()
 
-       # Basic Layout
+
+        # Basic Layout
         topPart = Frame(root)
         topPart.pack(fill="both", expand="yes", side="top")
 
@@ -308,69 +318,141 @@ class Remote(Frame):
         
 
     def gracefulQuit(self):
-        # disable serial link first
+        # kill thread
+        readThread.running = False
+        readThread.join()
+        
+        # disable serial link
+        ser.close()
+
+        # destroy gui
         root.destroy()
-        print "quit only if motors are off!!!"
+        
             
     def setIMUx(self):
-        print "setting imu x offset"
+        xOffset = self.xOffsetField.get()
+        # ser.write("setXO000" + str(xOffset))
+        dbg_output("[BROKEN] Setting X IMU Offset to: " + str(xOffset))
 
     def setIMUy(self):
-        print "setting imu y offset"
+        yOffset = self.yOffsetField.get()
+        # ser.write("setYO000" + str(yOffset))
+        dbg_output("[BROKEN] Setting Y IMU Offset to: " + str(yOffset))
+
         
     def flushCache(self):
-        print "flushing cache"
+        ser.write("----------")
+        dbg_output("Attempting to flush Cache")
+
         
     def zeroSpeed(self):
-        print "setting speed to zero"
+        ser.write("setBB01000")
+        dbg_output("Setting Speed to Zero")
+
         
     def speedUp(self):
-        print "speeding up"
+        self.xSpeed += 15
+        self.ySpeed += 15
+        if self.xSpeed == self.ySpeed:
+            ser.write("setBB0" + str(self.xSpeed))
+            dbg_output("Setting Speed to " + str(self.xSpeed))
+        else:
+            ser.write("setXB0" + str(self.xSpeed))
+            ser.write("setYB0" + str(self.YSpeed))
+            dbg_output("Setting x-Speed to " + str(self.xSpeed))
+            dbg_output("Setting y-Speed to " + str(self.ySpeed))
+      
 
     def speedDown(self):
-        print "speeding down"
+        self.xSpeed -= 15
+        self.ySpeed -= 15
+        if self.xSpeed == self.ySpeed:
+            ser.write("setBB0" + str(self.xSpeed))
+            dbg_output("Setting Speed to " + str(self.xSpeed))
+        else:
+            ser.write("setXB0" + str(self.xSpeed))
+            ser.write("setYB0" + str(self.YSpeed))
+            dbg_output("Setting x-Speed to " + str(self.xSpeed))
+            dbg_output("Setting y-Speed to " + str(self.ySpeed))
+
+
         
     def forward(self):
-        print "going forward"
-
-    def left(self):
-        print "going left"
-
-    def right(self):
-        print "going right"
+        self.xAngle += 5
+        ser.write("setXA00" + str(self.xAngle))
+        dbg_output("Setting x-Angle to: " + str(self.xAngle))
 
     def back(self):
-        print "going back"
+        self.xAngle -= 5
+        ser.write("setXA00" + str(self.xAngle))
+        dbg_output("Setting x-Angle to: " + str(self.xAngle))
+
+
+    
+    def left(self):
+        self.yAngle += 5
+        ser.write("setYA00" + str(self.yAngle))
+        dbg_output("Setting y-Angle to: " + str(self.yAngle))
+
+    def right(self):
+        self.yAngle -= 5
+        ser.write("setYA00" + str(self.yAngle))
+        dbg_output("Setting y-Angle to: " + str(self.yAngle))
+
+    
 
     def center(self):
-        print "centering"
+        ser.write("setXA00180")
+        ser.write("setYA00180")
+        dbg_output("Centering")
+
+
 
     def enMotors(self):
-        print "enabling motors"
+        ser.write("enMTR00002")
+        dbg_output("Enabling Motors")
 
     def disMotors(self):
-        print "disabling motors"
+        ser.write("setBB01000")
+        ser.write("enMTR00001")
+        dbg_output("Disabling Motors")
+
+
 
     def setManSpeed(self):
-        print "settings selected speeds"
+        dbg_output("Setting selected motor speeds (NOT IMPLEMENTED YET)")
+
+
  
     def enDbgIMU(self):
-        print "en debug imu"
+        ser.write("dbIMU00002")
+        dbg_output("Enabling IMU Debugging")
 
     def disDbgIMU(self):
-        print "dis debug imu"
+        ser.write("dbIMU00001")
+        dbg_output("Disabling IMU Debugging")
+
+
 
     def enDbgPID(self):
-        print "en debug pid"
+        ser.write("dbMTR00002")
+        dbg_output("Enabling PID Debugging")
 
     def disDbgPID(self):
-        print "dis debug pid"
+        ser.write("dbMTR00001")
+        dbg_output("Disabling PID Debugging")
+
+
 
     def enDbgSerial(self):
-        print "en debug serial"
+        ser.write("dbSER00002")
+        dbg_output("Enabling Serial Debugging")
 
     def disDbgSerial(self):
-        print "dis debug serial"
+        ser.write("dbSER00001")
+        dbg_output("Disabling Serial Debugging")
+
+
     
     def unlockFields(self):
         print "Unlocking entry fields..."
@@ -426,22 +508,83 @@ class Remote(Frame):
             self.y2Speed.update()
 
 
-def serial_read(i):
-    app.serialOutput.insert(END, "Run number: " + str(i))
-    app.serialOutput.yview(END)
-    root.after(200, serial_read, i+1)
 
+class StoppableThread(Thread):
+    def __init__(self):
+            Thread.__init__(self)
+            self.running = True
 
+    def run(self):
+        while self.running:
+            line = ser.readline()
+
+            # Fancy Debugging
+            if ";Y:" in line:
+                xValue = line[line.find("X:") + 2 : line.find(";")]
+                yValue = line[line.find("Y:") + 2 : len(line) - 1]
+         
+                app.xIMUDbgScale.set(float(xValue))
+                app.yIMUDbgScale.set(float(yValue))
+                
+            elif ";y-PID:" in line:
+                xValue = line[line.find("x-PID:") + 6 : line.find(";")]
+                yValue = line[line.find("y-PID:") + 6 : len(line) - 1]
+                
+                app.xPIDDbgScale.set(float(xValue))
+                app.yPIDDbgScale.set(float(yValue))
+                
+            else:
+                 dbg_output(line)
+                 
+
+def dbg_output(string):
+    if string != "":
+        app.serialOutput.insert(END, str(string))
+        app.serialOutput.yview(END)
+
+def keypress(event):
+    if event.keysym == 'Escape':
+        app.gracefulQuit()
+    key = event.char
+    if key == "w":
+        app.forward()
+    elif key == "s":
+        app.back()
+    elif key == "a":
+        app.left()
+    elif key == "d":
+        app.right()
+    elif key == "c":
+        app.center()
+    elif key == "+":
+        app.speedUp()
+    elif key == "-":
+        app.speedDown()
+    elif key == "0":
+        app.zeroSpeed()
+    elif key == "u":
+        app.enMotors()
+    elif key == "i":
+        app.disMotors()
+
+# Establish Serial Link
+ser = Serial()
+ser.baudrate = 19200
+ser.port = "COM3"
+ser.timeout = 1
+ser.close()
+ser.open()
+
+# Thread for serial data reading
+readThread = StoppableThread()
+readThread.start()
+
+# Build GUI
 root = Tk()
+root.bind_all('<Key>', keypress)
 app = Remote(master=root)
 app.master.title("Quadcopter Remote Control")
 app.master.minsize(800, 600)
 
-# schedule serial data reading
-root.after(1000, serial_read(1))
-
 # start event handling
 app.mainloop()
-
-
-
