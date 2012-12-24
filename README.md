@@ -1,4 +1,4 @@
-# Quadcpoter
+# Quadcopter
 _by Thomas Rieder_
 
 This is the source code for a quadcopter I built during summer break 2012.
